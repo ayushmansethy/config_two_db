@@ -1,5 +1,8 @@
 package com.ayush.config_two_database.users;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -38,7 +41,9 @@ public class UsersDatasourceConfig {
 
     @Bean
     public LocalContainerEntityManagerFactoryBean usersEntityManeger(EntityManagerFactoryBuilder builder,@Qualifier("usersDataSource") DataSource dataSource){
-        return builder.dataSource(dataSource).packages("com.ayush.config_two_database.users").persistenceUnit("users").build() ;
+        Map<String,Object> mp = new HashMap<>() ;
+        mp.put("hibernate.hbm2ddl.auto", "update");
+        return builder.dataSource(dataSource).packages("com.ayush.config_two_database.users").persistenceUnit("users").properties(mp).build() ;
     } 
 
     @Bean

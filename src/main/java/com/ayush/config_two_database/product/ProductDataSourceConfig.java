@@ -1,5 +1,8 @@
 package com.ayush.config_two_database.product;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -41,10 +44,14 @@ public class ProductDataSourceConfig {
         return dataSourceProperties.initializeDataSourceBuilder().build() ;
     }
 
+   
     @Bean
     @Primary
     public LocalContainerEntityManagerFactoryBean productEntityManeger(EntityManagerFactoryBuilder builder,@Qualifier("productDataSource") DataSource dataSource){
-        return builder.dataSource(dataSource).packages("com.ayush.config_two_database.product").persistenceUnit("product").build() ;
+        Map<String,Object> mp = new HashMap<>() ;
+        mp.put("hibernate.hbm2ddl.auto", "update");
+        
+        return builder.dataSource(dataSource).packages("com.ayush.config_two_database.product").persistenceUnit("product").properties(mp).build() ;
     } 
 
     @Bean
